@@ -87,3 +87,4 @@ class CustomUser(AbstractUser):
     def get_short_name(self):
         """Return the short name of the user."""
         return self.first_name or self.email
+
