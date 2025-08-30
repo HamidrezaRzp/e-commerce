@@ -3,9 +3,10 @@ from .models import Product, Category
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    seller = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Product
-        fields = ['name', 'description', 'category', 'price', 'stock']
+        fields = ['name', 'description', 'category', 'price', 'stock', 'seller']
 
 
 class CategorySerializer(serializers.ModelSerializer):
