@@ -4,19 +4,27 @@ class ProductPermissions(BasePermission):
     message = "You do not have permission to perform this action."
 
     def has_permission(self, request, view):
-        # Everyone can read
+        # All actions require authentication
+        if not request.user.is_authenticated:
+            return False
+            
+        # Authenticated users can read
         if request.method in SAFE_METHODS:
             return True
 
         # Only sellers can create products
         if request.method == "POST":
-            return request.user.is_authenticated and request.user.role == "SELLER"
+            return request.user.role == "SELLER"
 
         # Updates/deletes checked per object later
-        return request.user.is_authenticated
+        return True
 
     def has_object_permission(self, request, view, obj):
-        # Everyone can read
+        # All actions require authentication (checked in has_permission)
+        if not request.user.is_authenticated:
+            return False
+            
+        # Authenticated users can read
         if request.method in SAFE_METHODS:
             return True
 
