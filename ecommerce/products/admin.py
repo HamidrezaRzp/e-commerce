@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
-from .models import Product, Category
+from .models import Product, Category, Review
 
 
 @admin.register(Product)
@@ -17,3 +17,10 @@ class CategoryAdmin(admin.ModelAdmin):
     list_filter = ['name']
     search_fields = ['name',]
     ordering = ('name','created_at',)
+
+@admin.register(Review)
+class ReviewAdmin(admin.ModelAdmin):
+    list_display = ['product', 'user', 'score']
+    list_filter = ['product', 'user']
+    search_fields = ['product', 'user']
+    ordering = ('created_at','updated_at',)

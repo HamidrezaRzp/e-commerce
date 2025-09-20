@@ -2,6 +2,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.db.models import UniqueConstraint
+
+
 
 
 User = get_user_model()
@@ -50,3 +54,32 @@ class Product(models.Model):
     def clean(self):
         if self.seller.role != 'seller':
             raise ValidationError('Assigned user mut have seller role!')
+        
+
+class Review(models.Model):
+    product = models.ForeignKey(
+        "Product",
+        related_name="reviews",
+        on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        User,
+        related_name="reviews",
+        on_delete=models.CASCADE
+    )
+    score = models.DecimalField(
+        max_digits=2,
+        decimal_places=1,
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
+    text = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+        UniqueConstraint(fields=["product", "user"], name="unique_review_per_user")
+        ]
+
+    def __str__(self):
+        return f"{self.user} - {self.product} ({self.score})"
