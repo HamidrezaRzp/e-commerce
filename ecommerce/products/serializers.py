@@ -6,7 +6,7 @@ from django.db.models import Avg
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ["user", "rating", "comment", "created_at"]
+        fields = ["user", "score", "text", "created_at"]
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
                   'recent_reviews']
     
     def get_average_rating(self, obj):
-        avg = obj.reviews.aggregate(avg=Avg('ratings'))['avg']
+        avg = obj.reviews.aggregate(avg=Avg('score'))['avg']
         return round(avg, 2) if avg else None
     
     def get_recent_reviews(self, obj):
