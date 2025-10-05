@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'users.apps.UsersConfig',
     'products.apps.ProductsConfig',
 ]
@@ -169,3 +170,22 @@ SIMPLE_JWT = {
 
 #redis settings
 REDIS_CLIENT = redis.Redis(host='localhost', port=6379, db=0, decode_responses=True)
+
+
+#swagger settings
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': 'JWT Authorization header using the Bearer scheme. Example: "Authorization: Bearer {token}"'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+    'SECURITY_REQUIREMENTS': [
+        {
+            'Bearer': []
+        }
+    ],
+}
